@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SIA - tdedieu & awolski</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="toc.min.js"></script>
+
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="toc"></div>
+
+<div id="content">
+
+<h1>SIA - Dedieu Thomas & Wolski Axel</h1>
+
+<h2>TD 1 - Échantillonnage</h2>
+
+<h3>1. Monte-Carlo en 1D</h3>
+
+<h3>2. Anti-Aliasing</h3>
+
+<h4>2.1. Échantillonnage régulier</h4>
+
+Dans cette partie nous avons eu à calculer l'intensité de la lumière pour chaque pixels que l'on a divisé en grille de taille $n * n$.</br>
+Cela afin de pouvoir obtenir plusieurs intensité de lumière pour chacun des pixels, car au centre de chaque case de la grille nous lancerons un nouveau rayon.</br>
+Lors de la réalisation de cette partie nous avons d'abord obtenue des résultats pas satisfaisant, dans lequels nous pouvions clairement voir le découpage réalisé lors de nos calculs.</br>
+
+<div style>
+  <figure style="float: left;">
+  	<img src="twBAD2.png" width="400" alt="tw bad" />
+  </figure>
+  <figure style="float: left;">
+    <img src="twGOOD.png" width="400" alt="tw good" />
+  </figure>
+  <figcaption>Échantillonnage régulier - Erreur rencontré(gauche), resultats final(droite)</figcaption>
+</div>
+<div style="clear: left;">
+
+<h4>2.2. Échantillonnage stratifié</h4>
+
+Pour obtenir un échantillonnage stratifié, il faut comme précedement découper chaque pixel en grille. </br>
+A l'inverse de l'échantillonnage régulier, les nouveaux rayon seront lancé à des positions aléatoire et non plus au centre de chacune des cases.</br>
+
+<div style>
+  <figure style="float: left;">
+  	<img src="deuxSpheres32.png" width="400" alt="deux spheres x32" />
+  </figure>
+  <figure style="float: left;">
+    <img src="deuxSpheres8strat.png" width="400" alt="deux spheres x8 stratifié" />
+  </figure>
+  <figcaption>Échantillonnage stratifié - Deux Spheres 32x32 non stratifié(gauche), 8x8 stratifié(droite)</figcaption>
+</div>
+<div style="clear: left;">
+
+<h3>3. Sources étendues</h3>
+
+<h4>3.1. Échantillonnage de Monte-Carlo</h4>
+
+Dans cette partie nous avons dû mettre en place une source de lumière étendue.</br>
+Pour cela nous devions calculer pour chaque rayon de lumière, un second rayon d'ombre ayant une direction aléatoire devait être calculer dans whitted.cpp.</br>
+Cette partie nous a pris quelques temps afin de la mener à bien, car nous oublions de normaliser notre LightDir et cela ne nous permettait pas d'avoir le bon résultats.</br>
+
+<div style>
+  <figure style="float: left;">
+    <img src="tw_area8shadow.png" width="400" alt="tw source étendu" />
+    <figcaption>Échantillonnage stratifié source étendue</figcaption>
+  </figure>
+</div>
+<div style="clear: left;">
+
+<div style>
+  <figure style="float: left;">
+  	<img src="killeroo_area0.1.png" width="400" alt="killeroo 0.1" />
+  </figure>
+  <figure style="float: left;">
+    <img src="killeroo_area0.5.png" width="400" alt="killeroo 0.5" />
+  </figure>
+  <figcaption>Échantillonnage stratifié source étendue 0.1x0.1(gauche) et 0.5x0.5(droite) - killeroo</figcaption>
+</div>
+<div style="clear: left;">
+
+<h4>3.2. Source texturée</h4>
+
+Pour cette partie, nous avions rapidement compris le concept et l'idée du travail demandé. La lumière est remplacé par une texture avec 4 couleurs</br>
+Mais nos premières version n'était pas concluante, soit la lumière était entiérement rouge, soit nous avions des resultats comme sur l'image ci-dessous.</br>
+
+
+<div style>
+  <figure style="float: left;">
+    <img src="tw_areapb.png" width="400" alt="tw texture pb" />
+    <figcaption>Échantillonnage stratifié avec texture - problème rencontré</figcaption>
+  </figure>
+</div>
+<div style="clear: left;">
+
+<div style>
+  <figure style="float: left;">
+  	<img src="tw_areagood.png" width="400" alt="tw texture" />
+  </figure>
+  <figure style="float: left;">
+    <img src="tw_areaText.png" width="400" alt="tw texture zoom" />
+  </figure>
+  <figcaption>Échantillonnage stratifié  avec texture</figcaption>
+</div>
+<div style="clear: left;">
+
+<h3>4. Ambiante Occlusion</h3>
+
+<h4>4.1. Échantillonnage d'un hémisphère</h4>
+
+Dans cette partie il nous a suffit de completer les fonctions presente dans wrap.cpp à l'aide des formules vue en cours.</br>
+Cela afin de faire des calculs de points situé soir sur un disque soit sur une hémisphére de manière homogéne.</br>
+
+<p>Code de Wrap.cpp :
+
+<div class="highlight">
+<pre><code class="cpp">Point2f Warp::squareToUniformDisk(const Point2f &sample) {
+    Point2f res = Point2f();
+    float r = sqrt(sample.x());
+    float theta = 2*M_PI*sample.y();
+    res.x() = r*cos(theta);
+    res.y() = r*sin(theta);
+    return res;
+}
+
+float Warp::squareToUniformDiskPdf(const Point2f &p) {
+    float res = sqrt(p.x()*p.x() + p.y()*p.y());
+    float c = 1/M_PI;
+    return (res>1) ? 0 : c;
+}
+
+Vector3f Warp::squareToUniformHemisphere(const Point2f &sample) {
+    Vector3f res = Vector3f();
+    float phi = 2.f*M_PI*sample.x();
+    float theta = 1.f*acos(sample.y());
+    res.x() = sin(theta)*cos(phi);
+    res.y() = sin(theta)*sin(phi);
+    res.z() = cos(theta);
+    return res;
+}
+
+float Warp::squareToUniformHemispherePdf(const Vector3f &v) {
+    float c = 1.f/(2.f*M_PI);
+    return (v.z()<0) ? 0 : c;
+}
+
+Vector3f Warp::squareToCosineHemisphere(const Point2f &sample) {
+    Vector3f res = Vector3f();
+    float phi = 2.f*M_PI*sample.x();
+    float theta = 1.f*acos(sqrt(1.f-sample.y()));
+    res.x() = sin(theta)*cos(phi);
+    res.y() = sin(theta)*sin(phi);
+    res.z() = cos(theta);
+    return res;
+}
+
+float Warp::squareToCosineHemispherePdf(const Vector3f &v) {
+    float c = v.z()/M_PI;
+    return (v.z()<0) ? 0 : c;
+}
+</code></pre></div>
+</p>
+
+<h4>4.2. Calcul de l'AO</h4>
+
+Cette dernière partie est celle qui nous a causé le plus de problème.</br>
+Lorsque nous avons fini de remplir la fonction Li() qui se situe dans ao.cpp, à chaque lancé du programme nous avions comme erreur "invalid radiance value". </br>
+Nous avons donc pensez que nous devions surment faire une division par zero à un certain endroit.</br>
+Après avoir fais testé notre code chez d'autre camarade, nous avons vue que le problème n'etait pas dans ao.cpp. Nous avons verifié chaque fichier que nous avions modifier et impossible de trouver l'erreur.</br>
+Nous avons finalement décidé de re-télécharger les fichiers d'origine et y incorporer notre code dedans, l'erreur a disparue après cela.</br>
+
+<div style>
+  <figure style="float: left;">
+    <img src="killeroo_aoBUG.png" width="400" alt="killeroo ao PB" />
+    <figcaption>Ambiante Occlusion - problème rencontré(invalid radiance value)</figcaption>
+  </figure>
+</div>
+<div style="clear: left;">
+
+La méthode est donc de détecter si il y a une intersection, si il n'y en a pas les pixels seront noir.</br>
+Lorsqu'il y a une intersection alors nous utiliserons les fonctions d'hémisphére calculer dans wrap en un point aléatoire,
+et à l'aide d'un plan (u,v) perdendiculaire à la normal nous pourrons effectuer les calculs demandé dans le TD,</br> cela afin de determiner la couleur à l'intersection ainsi que le rayon d'ombre.</br>
+
+<div style>
+  <figure style="float: left;">
+  	<img src="killeroo_aoUniform.png" width="400" alt="killeroo ao uniform" />
+  </figure>
+  <figure style="float: left;">
+    <img src="killeroo_aoCosine.png" width="400" alt="killeroo ao cosine" />
+  </figure>
+  <figcaption>Ambiante Occlusion - Uniforme hémisphere(gauche), Cosine(droite)</figcaption>
+</div>
+<div style="clear: left;">
+
+</div>
+
+<script type="text/javascript">
+	$('#toc').toc({
+	    'selectors': 'h2,h3,h4', //elements to use as headings
+	    'container': 'body', //element to find all selectors in
+	    'smoothScrolling': true, //enable or disable smooth scrolling on click
+	    'prefix': 'toc', //prefix for anchor tags and class names
+	    'onHighlight': function(el) {}, //called when a new section is highlighted
+	    'highlightOnScroll': true, //add class to heading that is currently in focus
+	    'highlightOffset': 100, //offset to trigger the next headline
+	    'anchorName': function(i, heading, prefix) { //custom function for anchor name
+	        return prefix+i;
+	    },
+	    'headerText': function(i, heading, $heading) { //custom function building the header-item text
+	        return $heading.text();
+	    },
+	'itemClass': function(i, heading, $heading, prefix) { // custom function for item class
+	  return $heading[0].tagName.toLowerCase();
+	}
+	});
+</script>
+
+</body>

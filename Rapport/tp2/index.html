@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SIA - tdedieu & awolski</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github-gist.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="toc.min.js"></script>
+
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="toc"></div>
+
+<div id="content">
+
+<h1>SIA - Dedieu Thomas & Wolski Axel</h1>
+
+<h2>TD3 - BRDF de Ward</h2>
+
+<h3>1. Eclairage direct</h3>
+
+<div style>
+  <figure>
+  	<img src=".png" width="40%" alt="0.01" />
+    <img src=".png" width="40%" alt="0.1" />
+    <img src=".png" width="40%" alt="0.25" />
+    <img src=".png" width="40%" alt="0.5" />
+  </figure>
+  <figcaption>Résultats Ward isotrope (éclairage direct) αx = αy = 0.01, 0.1, 0.25, 0.5</figcaption>
+</div>
+</br>
+
+<div style>
+  <figure>
+  	<img src=".png" width="40%" alt="0.2 0.1" />
+    <img src=".png" width="40%" alt="0.5 0.1" />
+    <img src=".png" width="40%" alt="0.1 0.2" />
+    <img src=".png" width="40%" alt="0.1 0.5" />
+  </figure>
+  <figcaption>αx=0.2 αy=0.1 , αx=0.5 αy=0.1 , αx=0.1 αy=0.2, αx=0.1 αy=0.5</figcaption>
+</div>
+</br>
+
+<h3>2. Echantillonnage uniforme de la BRDF</h3>
+
+<div style>
+  <figure>
+  	<img src="sphereWardEnvMap0.01.png" width="40%" alt="sWEW0.01" />
+    <img src="sphereWardEnvMap0.1.png" width="40%" alt="sWEW0.1" />
+    <img src="sphereWardEnvMap0.5_0.1.png" width="40%" alt="sWEW0.5_0.1" />
+    <img src="sphereWardEnvMap0.1_0.5.png" width="40%" alt="sWEW0.1_0.5" />
+  </figure>
+  <figcaption>Résultats échantillonnage uniforme αx=αy=0.01 , αx=αy=0.1 , αx=0.5 αy=0.1 , αx=0.1 αy=0.5</figcaption>
+</div>
+</br>
+
+<h3>3. Echantillonnage préférentiel</h3>
+
+<div style>
+  <figure>
+  	<img src="sphereWardEnvMapray001.png" width="40%" alt="NsWEW0.01" />
+    <img src="sphereWardEnvMap01.png" width="40%" alt="NsWEW0.1" />
+    <img src="sphereWardEnvMap0501.png" width="40%" alt="NsWEW0.5_0.1" />
+    <img src="sphereWardEnvMap0105.png" width="40%" alt="NsWEW0.1_0.5" />
+  </figure>
+  <figcaption>Résultats directions préférentielles αx=αy=0.01 , αx=αy=0.1 , αx=0.5 αy=0.1 , αx=0.1 αy=0.5</figcaption>
+</div>
+</br>
+
+<div class="highlight">
+<pre><code class="cpp">if((v>0.25) && (v<=0.5)){
+  phiH +=M_PI;
+}else if((v>0.5)&&(v<0.75)){
+  phiH -=M_PI;
+}
+</code></pre></div>
+</p>
+
+<div style>
+  <figure>
+  	<img src="sphereWardEnvMap0.010.01.png" width="40%" alt="sWEW0.01" />
+    <img src="sphereWardEnvMap0.10.1.png" width="40%" alt="sWEW0.1" />
+    <img src="sphereWardEnvMap0.50.1.png" width="40%" alt="sWEW0.5_0.1" />
+    <img src="sphereWardEnvMap0.10.5.png" width="40%" alt="sWEW0.1_0.5" />
+  </figure>
+  <figcaption>Résultats échantillonnage préférentiel αx=αy=0.01 , αx=αy=0.1 , αx=0.5 αy=0.1 , αx=0.1 αy=0.5</figcaption>
+</div>
+</br>
+
+<div style>
+  <figure>
+  	<img src="sphereWardEnvMapDifSpec0.01.png" width="40%" alt="DSsWEW0.01" />
+    <img src="sphereWardEnvMapDifSpec0.1.png" width="40%" alt="DSsWEW0.1" />
+    <img src="sphereWardEnvMapDifSpec0.50.1.png" width="40%" alt="DSsWEW0.5_0.1" />
+    <img src="sphereWardEnvMapDifSpec0.10.5.png" width="40%" alt="DSsWEW0.1_0.5" />
+  </figure>
+  <figcaption>Résultats échantillonnage préférentiel avec direction spéculaire ou diffus αx=αy=0.01 , αx=αy=0.1 , αx=0.5 αy=0.1 , αx=0.1 αy=0.5</figcaption>
+</div>
+</br>
+
+<div class="highlight">
+<pre><code class="cpp">Color3f Ward::premultBrdf(const Vector3f& lightDir, const Vector3f& r, const Normal3f& normal, const Vector2f texcoord) const {
+    Vector3f i = lightDir;
+    Vector3f h = (i+r)/2.0;
+    h.normalize();
+    Color3f w = m_specularColor*h.dot(i)*(h.dot(normal)*h.dot(normal)*h.dot(normal))*sqrt(r.dot(normal)/i.dot(normal));
+    return w;
+}
+
+
+
+Vector3f Ward::is(const Normal3f& normal, const Vector3f& lightDir) const {
+  ...
+  ...
+  if(o.dot(normal)<0){
+    o = o-2.0*(o.dot(normal))*normal;
+  }
+  o.normalize();
+  return o;
+}
+</code></pre></div>
+</p>
+
+</br>
+</div>
+
+<script type="text/javascript">
+	$('#toc').toc({
+	    'selectors': 'h2,h3,h4', //elements to use as headings
+	    'container': 'body', //element to find all selectors in
+	    'smoothScrolling': true, //enable or disable smooth scrolling on click
+	    'prefix': 'toc', //prefix for anchor tags and class names
+	    'onHighlight': function(el) {}, //called when a new section is highlighted
+	    'highlightOnScroll': true, //add class to heading that is currently in focus
+	    'highlightOffset': 100, //offset to trigger the next headline
+	    'anchorName': function(i, heading, prefix) { //custom function for anchor name
+	        return prefix+i;
+	    },
+	    'headerText': function(i, heading, $heading) { //custom function building the header-item text
+	        return $heading.text();
+	    },
+	'itemClass': function(i, heading, $heading, prefix) { // custom function for item class
+	  return $heading[0].tagName.toLowerCase();
+	}
+	});
+</script>
+
+</body>
