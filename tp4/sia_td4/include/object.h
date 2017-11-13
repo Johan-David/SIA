@@ -137,4 +137,5 @@ private:
         } \
     } cls ##__NORI_;
 
+
 #endif

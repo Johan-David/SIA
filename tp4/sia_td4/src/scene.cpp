@@ -101,7 +101,7 @@ void Scene::intersect(const Ray& ray, Hit& hit) const
 }
 
 Photon Scene::samplePhoton() const{
-    int rand = Eigen::internal::random<float>(0,m_areaLightList.size()-1);
+    int rand = Eigen::internal::random<float>(0,m_areaLightList.size());
     AreaLight* myLight = m_areaLightList[rand];
     return myLight->samplePhoton();
 }

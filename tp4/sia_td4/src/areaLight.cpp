@@ -60,14 +60,21 @@ void AreaLight::loadTexture(const std::string &filename) {
 Photon AreaLight::samplePhoton() const
 {
     //TODO
-    float u = Eigen::internal::random<float>(0.0,1.0);
-    float v = Eigen::internal::random<float>(0.0,1.0);
-    Point3f y = position()
-                  + size()[0]*uVec() * u
-                  + size()[1]*vVec() * v;
+    float u = Eigen::internal::random<float>(-0.5,0.5);
+    float v = Eigen::internal::random<float>(-0.5,0.5);
+    Point3f y = this->position()
+                  + this->size()[0]*this->uVec() * u
+                  + this->size()[1]*this->vVec() * v;
 
-    Vector3f d = Warp::squareToCosineHemisphere(Point2f(u,v));
-    Photon photon = Photon(y,d, M_PI * (size()[0]*size()[1]) * m_intensity);
+    u = Eigen::internal::random<float>(0.0,1.0);
+    v = Eigen::internal::random<float>(0.0,1.0);
+
+    Vector3f warp = Warp::squareToCosineHemisphere(Point2f(u,v));
+    Vector3f d = this->direction().unitOrthogonal();
+    Vector3f dc = this->direction().cross(d);
+    Vector3f p = warp.x() * d + warp.y() * dc + warp.z() * this->direction();
+
+    Photon photon = Photon(y,p, M_PI * (size()[0]*size()[1]) * m_intensity);
     return photon;
 }
 
