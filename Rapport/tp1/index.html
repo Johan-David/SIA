@@ -52,15 +52,13 @@ Cela afin de pouvoir obtenir plusieurs intensité de lumière pour chacun des pi
 Lors de la réalisation de cette partie nous avons d'abord obtenue des résultats pas satisfaisant, dans lequels nous pouvions clairement voir le découpage réalisé lors de nos calculs.</br>
 
 <div style>
-  <figure style="float: left;">
-  	<img src="twBAD2.png" width="400" alt="tw bad" />
-  </figure>
-  <figure style="float: left;">
-    <img src="twGOOD.png" width="400" alt="tw good" />
+  <figure>
+  	<img src="twBAD2.png" width="40%" alt="tw bad" />
+    <img src="twGOOD.png" width="40%" alt="tw good" />
   </figure>
   <figcaption>Échantillonnage régulier - Erreur rencontré(gauche), resultats final(droite)</figcaption>
 </div>
-<div style="clear: left;">
+</br>
 
 <h4>2.2. Échantillonnage stratifié</h4>
 
@@ -68,15 +66,13 @@ Pour obtenir un échantillonnage stratifié, il faut comme précedement découpe
 A l'inverse de l'échantillonnage régulier, les nouveaux rayon seront lancé à des positions aléatoire et non plus au centre de chacune des cases.</br>
 
 <div style>
-  <figure style="float: left;">
-  	<img src="deuxSpheres32.png" width="400" alt="deux spheres x32" />
-  </figure>
-  <figure style="float: left;">
-    <img src="deuxSpheres8strat.png" width="400" alt="deux spheres x8 stratifié" />
+  <figure>
+  	<img src="deuxSpheres32.png" width="40%" alt="deux spheres x32" />
+    <img src="deuxSpheres8strat.png" width="40%" alt="deux spheres x8 stratifié" />
   </figure>
   <figcaption>Échantillonnage stratifié - Deux Spheres 32x32 non stratifié(gauche), 8x8 stratifié(droite)</figcaption>
 </div>
-<div style="clear: left;">
+</br>
 
 <h3>3. Sources étendues</h3>
 
@@ -87,23 +83,20 @@ Pour cela nous devions calculer pour chaque rayon de lumière, un second rayon d
 Cette partie nous a pris quelques temps afin de la mener à bien, car nous oublions de normaliser notre LightDir et cela ne nous permettait pas d'avoir le bon résultats.</br>
 
 <div style>
-  <figure style="float: left;">
-    <img src="tw_area8shadow.png" width="400" alt="tw source étendu" />
+  <figure>
+    <img src="tw_area8shadow.png" width="40%" alt="tw source étendu" />
     <figcaption>Échantillonnage stratifié source étendue</figcaption>
   </figure>
 </div>
-<div style="clear: left;">
 
 <div style>
-  <figure style="float: left;">
-  	<img src="killeroo_area0.1.png" width="400" alt="killeroo 0.1" />
-  </figure>
-  <figure style="float: left;">
-    <img src="killeroo_area0.5.png" width="400" alt="killeroo 0.5" />
+  <figure>
+  	<img src="killeroo_area0.1.png" width="40%" alt="killeroo 0.1" />
+    <img src="killeroo_area0.5.png" width="40%" alt="killeroo 0.5" />
   </figure>
   <figcaption>Échantillonnage stratifié source étendue 0.1x0.1(gauche) et 0.5x0.5(droite) - killeroo</figcaption>
 </div>
-<div style="clear: left;">
+</br>
 
 <h4>3.2. Source texturée</h4>
 
@@ -112,23 +105,20 @@ Mais nos premières version n'était pas concluante, soit la lumière était ent
 
 
 <div style>
-  <figure style="float: left;">
-    <img src="tw_areapb.png" width="400" alt="tw texture pb" />
+  <figure>
+    <img src="tw_areapb.png" width="40%" alt="tw texture pb" />
     <figcaption>Échantillonnage stratifié avec texture - problème rencontré</figcaption>
   </figure>
 </div>
-<div style="clear: left;">
 
 <div style>
-  <figure style="float: left;">
-  	<img src="tw_areagood.png" width="400" alt="tw texture" />
-  </figure>
-  <figure style="float: left;">
-    <img src="tw_areaText.png" width="400" alt="tw texture zoom" />
+  <figure>
+  	<img src="tw_areagood.png" width="40%" alt="tw texture" />
+    <img src="tw_areaText.png" width="40%" alt="tw texture zoom" />
   </figure>
   <figcaption>Échantillonnage stratifié  avec texture</figcaption>
 </div>
-<div style="clear: left;">
+</br>
 
 <h3>4. Ambiante Occlusion</h3>
 
@@ -196,27 +186,24 @@ Après avoir fais testé notre code chez d'autre camarade, nous avons vue que le
 Nous avons finalement décidé de re-télécharger les fichiers d'origine et y incorporer notre code dedans, l'erreur a disparue après cela.</br>
 
 <div style>
-  <figure style="float: left;">
-    <img src="killeroo_aoBUG.png" width="400" alt="killeroo ao PB" />
+  <figure>
+    <img src="killeroo_aoBUG.png" width="40%" alt="killeroo ao PB" />
     <figcaption>Ambiante Occlusion - problème rencontré(invalid radiance value)</figcaption>
   </figure>
 </div>
-<div style="clear: left;">
 
 La méthode est donc de détecter si il y a une intersection, si il n'y en a pas les pixels seront noir.</br>
 Lorsqu'il y a une intersection alors nous utiliserons les fonctions d'hémisphére calculer dans wrap en un point aléatoire,
 et à l'aide d'un plan (u,v) perdendiculaire à la normal nous pourrons effectuer les calculs demandé dans le TD,</br> cela afin de determiner la couleur à l'intersection ainsi que le rayon d'ombre.</br>
 
 <div style>
-  <figure style="float: left;">
-  	<img src="killeroo_aoUniform.png" width="400" alt="killeroo ao uniform" />
-  </figure>
-  <figure style="float: left;">
-    <img src="killeroo_aoCosine.png" width="400" alt="killeroo ao cosine" />
+  <figure>
+  	<img src="killeroo_aoUniform.png" width="40%" alt="killeroo ao uniform" />
+    <img src="killeroo_aoCosine.png" width="40%" alt="killeroo ao cosine" />
   </figure>
   <figcaption>Ambiante Occlusion - Uniforme hémisphere(gauche), Cosine(droite)</figcaption>
 </div>
-<div style="clear: left;">
+</br>
 
 </div>
 
