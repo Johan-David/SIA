@@ -20,6 +20,7 @@ public:
 
     /// evaluate the BRDF
     virtual Color3f brdf(const Vector3f& viewDir, const Vector3f& lightDir, const Normal3f& normal, const Vector2f& uv) const = 0;
+    virtual Color3f premultBrdf(const Vector3f& lightDir, const Vector3f& r, const Normal3f& normal, const Vector2f texcoord) const = 0;
 
 protected:
     /// texture
@@ -62,7 +63,7 @@ public:
    Color3f reflectivity() const { return Color3f(0); }
 
    Color3f brdf(const Vector3f& viewDir, const Vector3f& lightDir, const Normal3f& normal, const Vector2f& uv) const { return diffuseColor(uv) * INV_PI; }
-
+   virtual Color3f premultBrdf(const Vector3f& lightDir, const Vector3f& r, const Normal3f& normal, const Vector2f texcoord) const {return Color3f(0.0);}
    virtual Vector3f is(const Normal3f& normal, const Vector3f& lightDir) const {return Vector3f(0.0);}
 
    std::string toString() const {
@@ -105,7 +106,7 @@ public:
     std::string toString() const;
 
     virtual Vector3f is(const Normal3f& normal, const Vector3f& lightDir) const;
-
+    virtual Color3f premultBrdf(const Vector3f& lightDir, const Vector3f& r, const Normal3f& normal, const Vector2f texcoord) const;
 protected:
     Color3f m_specularColor;
     float m_alphaX;

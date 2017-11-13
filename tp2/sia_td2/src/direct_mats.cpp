@@ -3,7 +3,6 @@
 #include "material.h"
 #include "warp.h"
 
-
 class DirectMats : public Integrator
 {
 public:
@@ -24,23 +23,28 @@ public:
         Normal3f normal = hit.normal();
 
         for(int i=0; i<m_sampleCount; ++i){
+            if(m_IS) {
+                   Vector3f r = material->is(normal,-ray.direction);
+                   if(normal.dot(r)<0)
+                       r=-r;
+                   Color3f envmap = scene->backgroundColor(r);
+                   Color3f BRDF = material->premultBrdf(-ray.direction, r, normal, hit.texcoord());
+                   radiance += (envmap * BRDF);
+            }else{
+                float pdf;
 
-            Vector3f u = normal.unitOrthogonal();
-            Vector3f v = normal.cross(u);
+                Vector3f u = normal.unitOrthogonal();
+                Vector3f v = normal.cross(u);
 
-            Vector3f d;
-            float pdf;
-
-            d = Warp::squareToCosineHemisphere(Point2f(Eigen::internal::random<float>(0,1),Eigen::internal::random<float>(0,1)));
-            pdf = Warp::squareToCosineHemispherePdf(d);
-
-            Vector3f r = d.x() * u + d.y() * v + d.z() * normal;
-
-
-            Color3f envmap = scene->backgroundColor(r);
-            float cos_term = std::max(0.f,r.dot(normal));
-            Color3f BRDF = material->brdf(-ray.direction, r, normal, hit.texcoord());
-            radiance += (envmap * BRDF * cos_term) / pdf;
+                Vector3f d;
+                d = Warp::squareToCosineHemisphere(Point2f(Eigen::internal::random<float>(0,1),Eigen::internal::random<float>(0,1)));
+                pdf = Warp::squareToCosineHemispherePdf(d);
+                Vector3f r = d.x() * u + d.y() * v + d.z() * normal;
+                Color3f envmap = scene->backgroundColor(r);
+                float cos_term = std::max(0.f,r.dot(normal));
+                Color3f BRDF = material->brdf(-ray.direction, r, normal, hit.texcoord());
+                radiance += (envmap * BRDF * cos_term) / pdf;
+            }
         }
 
         return radiance / m_sampleCount;

@@ -7,6 +7,7 @@
 #include "mesh.h"
 #include "sphere.h"
 #include "fbo.h"
+#include "quad.h"
 
 #include <iostream>
 
@@ -34,7 +35,7 @@ private:
     int _winWidth, _winHeight;
 
     Camera _cam;
-    Shader _blinnPrg, _simplePrg, _gBufferPrg;
+    Shader _blinnPrg, _simplePrg, _gBufferPrg, _deferredPrg;
 
     FBO* fbo ;
 
@@ -47,9 +48,13 @@ private:
     Eigen::Vector3f _lightColor;
     float _lightAngle = 0.f;
 
+    std::vector<Sphere*> _lights;
+    std::vector<Eigen::Vector3f*> _lightsColors;
+
     // Mouse parameters
     Eigen::Vector2f _lastMousePos;
     int _button = -1;
+    Quad* _quad;
 };
 
 #endif

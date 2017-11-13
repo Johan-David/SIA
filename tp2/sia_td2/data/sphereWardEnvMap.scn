@@ -6,7 +6,7 @@
 
  <integrator type="direct_mats">
  	<integer name="samples" value="100"/>   
- 	<boolean name="IS" value="false"/>
+ 	<boolean name="IS" value="true"/>
  </integrator>
 
  <camera type="perspective">
