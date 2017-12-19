@@ -39,35 +39,21 @@
 
 <h1>SIA - Dedieu Thomas & Wolski Axel</h1>
 
-<h2>TD4 - Photon Mapping</h2>
+<h2>TD7 - Interpolation poly-harmonique</h2>
 
-<h3>1. Emission et tracé des photons</h3>
+<h3>1. Prise en main</h3>
 
-<p> Pour la première partie de ce tp, nous devons coder <b>AreaLight::samplePhoton()</b> afin de pouvoir envoyer des photons dans des direction aléatoire à partir d'une position aléatoire de <b>AreaLight</b>.
-  Si un photon touche une surface diffuse alors une partie de sa puissance, que l'on doit calculer à l'aide d'une formule fournie, ainsi que la lumière seront alors réfléchies (on peut dire que le photon rebondi)
-  . Si le photon touche un surface non-diffuse alors aucune puissance n'est retransmissive et pareil pour la lumière. On effectue applique cette approche pour chaque photon et manière recursive. On effectue cela
-jusqu'à se que l'on atteigne le nombre de photon <b>photonCount</b> soit atteint.</p>
+<h3>2. Création de la matrice Laplacienne </h3>
 
-<h3>2. Estimation de la radiance</h3>
+<h3>3. Isolation des inconnues (ré-ordonnancement) </h3>
 
-<p> Dans cette partie, il nous suffit simplement de récuperer et modifier la fonction <b>Li</b> se trouvant dans <b>PathMats</b> afin que celle-ci puisse calculer la lumière diffuse.
-Pour cela nous devons utiliser la formule du <b>noyau de reconstruction de Simpson</b> pour chaques photons qui intersect une surface diffuse. On calcul pour chacun d'eux une estimation de la radiance,
-et on stop la récursion, contrairement à la partie précedente.</p>
+<h3>4. Résolution du système </h3>
 
-<div style>
-  <figure>
-  	<img src="cbox_pmap10M.png" width="40%" alt="pmapBad" />
-  </figure>
-  <figcaption>Premier resultat obtenu avec un plafond non visible</figcaption>
-</div>
+<h3>5. Reconstruction bi-harmonique et tri-harmonique </h3>
 
-<div style>
-  <figure>
-  	<img src="cbox_pmap1M.png" width="40%" alt="pmap1M" />
-    <img src="cbox_pmap10MG.png" width="40%" alt="pmap10M" />
-  </figure>
-  <figcaption>Résultats final pour 1 million de photons et 10 millions avec 1 chemin par pixels</figcaption>
-</div>
+<h3>6. Formule des co-tangentes </h3>
+
+<h3>7. Déformation interactive </h3>
 
 </br>
 </div>

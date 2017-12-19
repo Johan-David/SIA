@@ -43,6 +43,68 @@
 
 <h3>1. Création et remplissage du g-buffer</h3>
 
+<p> Dans un premier temps allons devoir réaliser le rendu d'une scène sans éclairage, et à stocker par pixel un certain nombre d'attributs (couleur, normale, profondeur) dans un g-buffer.
+Pour cela nous avons eu a remplir la fonction <b>init(int width, int height)</b> dans le fichier <b>fbo.cpp</b> :</p>
+
+<div class="highlight">
+<pre><code class="cpp">//1. generate a framebuffer object and bind it
+// TODO
+glGenFramebuffers(1,&_fboId);
+glBindFramebuffer(GL_FRAMEBUFFER, _fboId);
+
+//2. init texture
+glGenTextures(1, &renderedTexture[0]);
+
+// Bind the newly created texture
+glBindTexture(GL_TEXTURE_2D, renderedTexture[0]);
+glTexImage2D(GL_TEXTURE_2D, 0, (GLint)GL_RGB32F, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)GL_CLAMP_TO_EDGE);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)GL_CLAMP_TO_EDGE);
+
+glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, renderedTexture[0], 0);
+
+checkError();
+
+glGenTextures(1, &renderedTexture[1]);
+glBindTexture(GL_TEXTURE_2D, renderedTexture[1]);
+
+// Give an empty image to OpenGL
+glTexImage2D(GL_TEXTURE_2D, 0, (GLint)GL_RGB32F, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)GL_CLAMP_TO_EDGE);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)GL_CLAMP_TO_EDGE);
+
+//3. attach the texture to FBO color attachment point
+// TODO
+glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, renderedTexture[1], 0);
+
+checkError();
+
+//4. init a depth buffer as a texture (in order to use it inside shaders afterward)
+// TODO - similar to step 2 with a depth specific texture
+glGenTextures(1, &depthTexture);
+glBindTexture(GL_TEXTURE_2D, depthTexture);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)GL_CLAMP_TO_EDGE);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)GL_CLAMP_TO_EDGE);
+
+
+//5. attach the depth buffer to FBO depth attachment point
+// TODO
+glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+</code></pre></div>
+</p>
+
+<p> Dans un premier temps nous utilisions seulement deux textures, une pour la couleur RGB et une pour la normal, et nous utilisions directement un <b>Depth_buffer</b> pour le depth_texture.
+  Mais dans la deuxième partie nous nous sommes confronté à plusieur problèmes et nous avons par conséquent changé cette première partie afin d'utilisé que 3 textures.<p>
+
 <div style>
   <figure>
   	<img src="outRGB2.png" width="40%" alt="outRGB" />
@@ -57,6 +119,9 @@
   <figcaption>Bugs avec les normals</figcaption>
 </div>
 
+<p> Afin de pouvoir sauvegarder les images obtenue pour les différentes textures, nous avons eu à modifier la fonction <b>savePNG(const std::string &name)</b> dans le fichier <b>fbo.cpp</b> dans laquel
+  on indique en paramètre quelle texture on veut. <b>0</b> si c'est pour l'image avec la couleurs RGB, <b>1</b> pour celle avec les normales.</p>
+
 <div style>
   <figure>
   	<img src="outNormales.png" width="40%" alt="outNormals" />
@@ -65,6 +130,15 @@
 </div>
 
 <h3>2. Calcul de l'éclairage</h3>
+
+<p> Dans cette partie nous travaillons sur les shaders de la scènes en créant nos propres shaders en nous inspirant de ceux déjà présent et cela afin de calculer l'éclairage une fois par pixel</p>
+
+<div style>
+  <figure>
+  	<img src="troislumiere.png" width="40%" alt="3lum" />
+  </figure>
+  <figcaption>Resultat avec trois lumières</figcaption>
+</div>
 
 </br>
 </div>
