@@ -39,33 +39,85 @@
 
 <h1>SIA - Dedieu Thomas & Wolski Axel</h1>
 
-<h2>TD6 - Shadow Volumes</h2>
+<h2>TD8 - Système masse-ressort</h2>
 
-<h3>1. Construction des volumes d'ombres</h3>
+<h3>Partie 1 - Méthode de la classe Particles.</h3>
 
-<div style>
-  <figure>
-  	<img src="sphere1shadowgod.png" width="40%" alt="sphere1Shadow" />
-    <img src="sphere11shadowgod.png" width="40%" alt="sphere11Shadow" />
-  </figure>
-  <figcaption>Résultats affichage ombre portées opaques sur la sphère</figcaption>
-</div>
+<p>
+Dans cette partie nous avons implémenté toutes les forces : gravity, drag, spring pour chaque particule dans notre système.
+Les équations des forces ce trouvent dans le cours (<a href="http://www.labri.fr/perso/pbenard/teaching/sia/slides/AnimPhysique.pdf">http://www.labri.fr/perso/pbenard/teaching/sia/slides/AnimPhysique.pdf</a>).
+Ensuite nous avons implémenté les méthodes <b>getDimensions</b>, <b>get/setState</b> et <b>getDerivative</b> également en utilisant le cours mais aussi
+avec le cours Siggraph (<a href="https://www.pixar.com/assets/pbm2001/index.html">https://www.pixar.com/assets/pbm2001/index.html</a>)
+</p>
 
-<div style>
-  <figure>
-  	<img src="tw1Shadowgod.png" width="40%" alt="twShadow" />
-  </figure>
-  <figcaption>Resultat affichage ombre portées opaques sur le teletebis</figcaption>
-</div>
+<h3>Partie 2 - Intégration d'euler et méthode du point du milieu.</h3>
 
-<h3>2. Comptage des entrées et sorties </h3>
+<p>
+L'intégration d'euler permet de calculer le prochain état des particules selon l'<i>état de base + dérivé * delta T</i>. Nous avons pour cela utilisé les
+méthodes implémentées à la partie précédente. Comme le montre ce code :
+<div class="highlight">
+<pre><code class="cpp">void explicitEulerStep (ODESystem *system, double dt) {
+    // TODO: implement this
+    VectorXd state = VectorXd(system->getDimensions());
+    system->getState(state);
+    VectorXd deriv = VectorXd(system->getDimensions());
+    system->getDerivative(deriv);
+    state = state + dt*deriv;
+    system->setState(state);
+}
+</code></pre></div>
 
-<div style>
-  <figure>
-  	<img src="stencil.png" width="40%" alt="stencil" />
-  </figure>
-  <figcaption>Resultat dans le Stencil</figcaption>
-</div>
+Nous avons vu qu'avec cette simple méthode le calcul des particules n'étaient pas corrects.
+En effet La particule ne se déplaçait pas au bon endroit, donc avec l'effets domino, c'est tout notre système qui ne se déplace pas comme il devrait.
+De ce fait nous avons implémenté la méthode du point du milieu.
+Celle-ci n'est pas très différente à l'intégration d'euler mais les déplacements sont plus cohérents.
+On sauvegarde l'état de base, ensuite on met à jours notre état avec un (<i>deta T/2</i>), on récupère une nouvelle dérivé (celle de notre état mis à jours)
+puis on met à jours notre état avec l'<i>état sauvegardé + delta T * nouvelle dérivé</i>. Comme l'indique le code ci-dessous :
+
+<div class="highlight">
+<pre><code class="cpp">void midPointStep (ODESystem *system, double dt) {
+    // TODO: implement this
+    VectorXd currentS = VectorXd(system->getDimensions());
+    system->getState(currentS);
+
+    VectorXd deriv = VectorXd(system->getDimensions());
+    system->getDerivative(deriv);
+    VectorXd state = VectorXd(system->getDimensions());
+    system->getState(state);
+
+    state = state + (dt*deriv)/2.0;
+    system->setState(state);
+
+    system->getDerivative(deriv);
+
+    currentS = currentS + dt*deriv;
+    system->setState(currentS);
+}
+</code></pre></div>
+</p>
+
+<h3>Partie 3 - Collisions</h3>
+
+Nous avons dans un premier temps du créer un plan carré sur lequel appliqué la collision avec notre système de particule.
+Ensuite nous avons suivi les équations pages 43 à 48 du cours, cité précédemment pour les gérer les collisions.
+
+<h3>Partie 4 - Mesh</h3>
+Dans cette partie nous avons mis à jours un maillage selon notre système de particule.
+Nous avons repris le code <b>openGL</b> pour appliquer blinn-phong à notre maillage.
+Ensuite à chaque update de notre scène on appelle cette fonction :
+
+<div class="highlight">
+<pre><code class="cpp">void Mesh::updatePos(ParticleSystem *psys)
+{
+    for(size_t i=0; i<psys->particles.size(); i++){
+        _vertices[i].position = psys->particles[i]->x.cast<float>();
+    }
+    updateNormals();
+    updateVBO();
+}
+</code></pre></div>
+
+Cette fonction permet de mettre à jours chaque sommet de notre maillage au position de chaque particule correspondant de notre système.
 
 </br>
 </div>

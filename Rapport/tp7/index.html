@@ -45,15 +45,87 @@
 
 <h3>2. Création de la matrice Laplacienne </h3>
 
+<p>
+Pour cette partie, la théorie a été comprise assez vite, cependant la pratique elle fut plus fastidieuse.
+En effet, le parcours de chaque voisin de chaque sommet pour y appliqué le poids associé est plus délicate.
+Même si ici, on simplifie les poids des voisins à 1. Nous avons utilisé des Vertex_iterators ainsi que la méthode <b>to_vertex()</b>
+pour trouver le sommet de départ d'un halfedge. Pour stocker toutes ces information la classe SpMat de Eigen est utilisé,
+car elle permet de manipuler facilement notre matrice laplacienne.
+</p>
+
 <h3>3. Isolation des inconnues (ré-ordonnancement) </h3>
+
+<p>
+Pour cette partie nous avons réorganisé les équations et les sommets de notre matrice pour isoler les inconnues.
+C’est-à-dire que nous réordonnons pour l'attribut <i>v:mask</i> = 1.
+Lorsque que la matrice est réordonnée, nous pourrons utiliser les inconnues en L00 (en haut à gauche de la matrice) et L01 (en haut à droite).
+</p>
 
 <h3>4. Résolution du système </h3>
 
+<p>
+Pour la résolution du système vu dans le td 7 ici (<a href="http://www.labri.fr/perso/guenneba/sia_2017/TD_SIA_2017_2018_Laplacien.pdf"> http://www.labri.fr/perso/guenneba/sia_2017/TD_SIA_2017_2018_Laplacien.pdf </a>)
+nous utilisons simplement la fonction <i>SimplicialLDLT</i> de <b>Eigen</b>.
+Le résultat que l'obtient doit être ensuite remis dans le bon ordre.
+<div class="highlight">
+<pre><code class="cpp">void poly_harmonic_interpolation(const Surface_mesh& mesh, Ref<MatrixXf> u, int k)
+{
+    int n = mesh.n_vertices();
+
+    SpMat L(n,n);
+    create_laplacian_matrix(mesh, L, false);
+
+    Permutation perm = Permutation(n);
+    int nb_unknowns = create_permutation(mesh, perm);
+    std::cout << nb_unknowns << std::endl;
+
+    L = L.twistedBy(perm);
+
+    MatrixXf tmp = perm*(u.transpose());
+    SpMat L00 = L.topLeftCorner(nb_unknowns,nb_unknowns);
+    SpMat L01 = L.topRightCorner(nb_unknowns,n-nb_unknowns);
+    Ref<MatrixXf> C = tmp.bottomRows(n-nb_unknowns);
+
+    SimplicialLDLT<SparseMatrix<float>> solver;
+    solver.compute(L00);
+    if(solver.info()!=Success) {
+        // decomposition failed
+        std::cerr << "decomposition failed\n";
+        return;
+    }
+    MatrixXf U = solver.solve(-L01*C);
+    if(solver.info()!=Success) {
+        // solving failed
+        std::cerr << "solving failed\n";
+        return;
+    }
+
+    tmp.topRows(nb_unknowns) = U;
+    u = MatrixXf(perm.inverse() * tmp).transpose();
+</code></pre></div>
+</p>
+
 <h3>5. Reconstruction bi-harmonique et tri-harmonique </h3>
+
+<p>
+Cette partie est assez rapide à implémenter. Il suffit de boucler une opération en fonction de k.
+Voici le code :
+<div class="highlight">
+<pre><code class="cpp">SpMat L(n,n);
+create_laplacian_matrix(mesh, L, true);
+SpMat tmpL=L;
+for(int i=0; i<k-1; i++){
+    L = L*tmpL;
+}
+</code></pre></div>
+</p>
 
 <h3>6. Formule des co-tangentes </h3>
 
-<h3>7. Déformation interactive </h3>
+<p>
+Ici nous devions mettre à jours notre implémentation de la partie 2 pour que notre matrice laplacienne
+utilise les valeurs correctes des poids. En suivant l'équation proposé dans le td 7.
+</p>
 
 <div style>
   <figure>
@@ -82,6 +154,12 @@
   </figure>
   <figcaption>Resultat Lapin 3</figcaption>
 </div>
+
+<h3>7. Déformation interactive </h3>
+
+<p>
+Nous n'avons pas effectué cette partie, en effet le manque temps et la surcharge de travail à ce moment tu td nous a bloqué.
+</p>
 
 </br>
 </div>
